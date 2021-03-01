@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.spotifyplaylist.repository.PlaylistRepository
 
+/**
+ * Creates a [PlaylistViewModel] with a [PlaylistRepository] attached to it.
+ */
 class PlaylistViewModelProviderFactory(
-    val playlistRepository: PlaylistRepository
+        private val playlistRepository: PlaylistRepository
 ): ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

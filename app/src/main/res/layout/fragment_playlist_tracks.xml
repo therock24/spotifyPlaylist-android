@@ -18,14 +18,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="@string/tv_featured_playlists"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/playlist_tracks"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/trackSearch"/>
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/trackSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightGrey"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@null"
+            android:layout_marginVertical="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tvTracksTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/rvTracks"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTracks"
@@ -34,7 +50,7 @@
             android:layout_marginVertical="10dp"
             android:layout_weight="1"
             android:background="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/tvTracksTitle"
+            app:layout_constraintTop_toBottomOf="@id/trackSearch"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

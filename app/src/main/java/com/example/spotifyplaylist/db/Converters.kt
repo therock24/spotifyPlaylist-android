@@ -6,9 +6,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-
+/**
+ * Converters to store Playlist Image URLs on Room Database.
+ */
 class Converters {
-
     @TypeConverter
     fun fromPlaylistImageArray(playlistImages: List<PlaylistImage>): String {
         return Gson().toJson(playlistImages)

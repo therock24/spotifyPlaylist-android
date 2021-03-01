@@ -9,6 +9,9 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+/**
+ * This service contains the Spotify API requests regarding playlists and tracks.
+ */
 interface ApiService {
 
     @GET("v1/browse/featured-playlists/")

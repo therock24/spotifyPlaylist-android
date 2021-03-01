@@ -27,7 +27,7 @@ data class PlaylistTrackItem(
     )
 
 data class PlaylistTracksResponse(
-    val items: List<PlaylistTrackItem>,
+    val items: MutableList<PlaylistTrackItem>,
     val limit: Int,
     val offset: Int,
     val total: Int

@@ -6,6 +6,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * Builds a Retrofit instance to handle requests to the Playlists and Tracks part of the Spotify API.
+ */
 class RetrofitApiInstance {
     companion object {
 

@@ -6,6 +6,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * Builds a Retrofit instance to handle requests to Spotify Auth API.
+ */
 class RetrofitAccountInstance {
     companion object {
 

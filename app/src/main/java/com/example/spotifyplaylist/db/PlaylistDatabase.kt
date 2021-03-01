@@ -7,12 +7,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.spotifyplaylist.models.PlaylistItem
 
+/**
+ * Room database to store playlists fetched from the Spotify API.
+ */
 @Database(
     entities = [PlaylistItem::class],
     version = 2,
     exportSchema = false
 )
-
 @TypeConverters(Converters::class)
 abstract class PlaylistDatabase: RoomDatabase() {
 

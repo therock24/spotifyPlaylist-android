@@ -14,12 +14,12 @@ data class PlaylistImage (
 data class PlaylistItem (
     @PrimaryKey
     val id: String,
-    val name: String,
-    val images: List<PlaylistImage>
+    val name: String?,
+    val images: List<PlaylistImage>?
 ) : Serializable
 
 data class PlaylistItems(
-    val items: List<PlaylistItem>,
+    val items: MutableList<PlaylistItem>,
     val limit: Int,
     val offset: Int,
     val total: Int,

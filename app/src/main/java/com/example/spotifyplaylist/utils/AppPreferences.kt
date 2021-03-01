@@ -3,6 +3,11 @@ package com.example.spotifyplaylist.utils
 import android.content.Context
 import android.content.SharedPreferences
 
+/**
+ * Object that works as a wrapper to read and write values from SharedPreferences.
+ * It is used to store tokens, refresh codes and other useful variables to start the application
+ * and maintain the user session.
+ */
 object AppPreferences {
 
     private const val NAME = "SpotifyPlaylistApp"
@@ -39,9 +44,31 @@ object AppPreferences {
      */
     var refreshCode: String?
         // custom getter to get a preference of a desired type, with a predefined default value
-        get() = preferences.getString("user_token", "")
+        get() = preferences.getString("refresh_code", "")
         // custom setter to save a preference back to preferences file
         set(value) = preferences.edit {
-            it.putString("user_token", value)
+            it.putString("refresh_code", value)
+        }
+
+    /**
+     * Stores the token expiration timestamp.
+     */
+    var tokenExpiration: Long
+        // custom getter to get a preference of a desired type, with a predefined default value
+        get() = preferences.getLong("token_expiration", 0)
+        // custom setter to save a preference back to preferences file
+        set(value) = preferences.edit {
+            it.putLong("token_expiration", value)
+        }
+
+    /**
+     * Stores the Spotify User Token.
+     */
+    var isFirstRun: Boolean
+        // custom getter to get a preference of a desired type, with a predefined default value
+        get() = preferences.getBoolean("first_run", true)
+        // custom setter to save a preference back to preferences file
+        set(value) = preferences.edit {
+            it.putBoolean("first_run", value)
         }
 }

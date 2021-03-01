@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:minHeight="80dp"
             app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/lightGrey"
             android:layout_marginVertical="4dp"
             android:layout_marginHorizontal="4dp"
             app:layout_constraintTop_toTopOf="parent"

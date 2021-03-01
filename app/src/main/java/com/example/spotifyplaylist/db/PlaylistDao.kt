@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.spotifyplaylist.models.PlaylistItem
 
+/**
+ * Data access object to obtain playlists from the Room Database.
+ */
 @Dao
 interface PlaylistDao {
 

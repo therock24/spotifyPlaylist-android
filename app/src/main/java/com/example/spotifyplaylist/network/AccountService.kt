@@ -6,6 +6,9 @@ import com.example.spotifyplaylist.utils.Constants
 import retrofit2.Response
 import retrofit2.http.*
 
+/**
+ * This service contains the Spotify API requests regarding user authentication.
+ */
 interface AccountService {
 
     @Headers("Authorization: ${Constants.SPOTIFY_AUTHORIZATION_BASE64}",

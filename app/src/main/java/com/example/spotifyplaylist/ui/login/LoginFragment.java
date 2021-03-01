@@ -1,7 +1,6 @@
 package com.example.spotifyplaylist.ui.login;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,39 +15,42 @@ import androidx.navigation.Navigation;
 import com.example.spotifyplaylist.R;
 import com.example.spotifyplaylist.databinding.FragmentLoginBinding;
 import com.example.spotifyplaylist.MainActivity;
+import com.example.spotifyplaylist.utils.AppPreferences;
 import com.example.spotifyplaylist.utils.Resource;
 
-
+/**
+ * Fragment that allows the user to login and authorize the app to use Spotify API on his/her behalf.
+ */
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
     private LoginViewModel viewModel;
-    private String TAG = "PlaylistFragment";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
 
+        viewModel = ((MainActivity)requireActivity()).loginViewModel;
+        // set the login button listener
         binding.btnLogin.setOnClickListener(v -> {
-            Log.i("Fragment", "Button clicked!!");
-            ((MainActivity)requireActivity()).openLoginWindow();
+            login();
         });
 
-        viewModel = ((MainActivity)requireActivity()).loginViewModel;
-
-        viewModel.getLoginLiveData().observe(getViewLifecycleOwner(),response -> {
+        // observe for the Spotify API authentication responses
+        viewModel.getTokenLiveData().observe(getViewLifecycleOwner(), response -> {
             if(response instanceof Resource.Success){
                 hideProgressBar();
 
+                // update first run boolean to avoi having to login again
+                AppPreferences.INSTANCE.setFirstRun(false);
+
                 // navigate to playlist fragment
-                Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).
-                        navigate(R.id.action_loginFragment_to_playlistFragment);
+                navigateToPlaylists();
             }
             else if(response instanceof Resource.Error) {
                 hideProgressBar();
                 if (response.getMessage() != null) {
-                    Log.e(TAG,"Error occurred: " + response.getMessage());
                     Toast.makeText(requireActivity(),"Error: " + response.getMessage(),Toast.LENGTH_LONG).show();
                 }
             }
@@ -57,8 +59,30 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        Log.i("Fragment", "OnCreateView()");
         return binding.getRoot();
+    }
+
+    // decides on the next action depending if there is a token already available
+    private void login() {
+        if(AppPreferences.INSTANCE.isFirstRun() || AppPreferences.INSTANCE.getUserToken() == null) {
+            // if it is the user first run, open login window
+            ((MainActivity)requireActivity()).openLoginWindow();
+        } else {
+            // if the token has expired
+            if (AppPreferences.INSTANCE.getTokenExpiration() < (System.currentTimeMillis()/1000L)) {
+                // request a new refreshed token
+                viewModel.requestToken(AppPreferences.INSTANCE.getRefreshCode(),true);
+            } else {
+                // navigate to playlist fragment
+                navigateToPlaylists();
+            }
+        }
+    }
+
+    private void navigateToPlaylists() {
+        // navigate to playlist fragment
+        Navigation.findNavController(requireActivity(),R.id.nav_host_fragment).
+                navigate(R.id.action_loginFragment_to_playlistFragment);
     }
 
     private void hideProgressBar() {
@@ -68,78 +92,5 @@ public class LoginFragment extends Fragment {
     private void showProgressBar() {
         binding.loading.setVisibility(View.VISIBLE);
     }
-
-   /*
-    fun onRequestCodeClicked(view: View?) {
-        val request = getAuthenticationRequest(AuthorizationResponse.Type.CODE)
-        AuthorizationClient.openLoginActivity(
-            requireActivity(),
-            AUTH_CODE_REQUEST_CODE,
-            request
-        )
-    }
-
-    fun onRequestTokenClicked(view: View?) {
-        val request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)
-        AuthorizationClient.openLoginActivity(
-            requireActivity(),
-            AUTH_TOKEN_REQUEST_CODE,
-            request
-        )
-    }
-
-    private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest {
-        return AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
-            .setShowDialog(false)
-            .setScopes(arrayOf("user-read-email"))
-            .setCampaign("your-campaign-token")
-            .build()
-    }
-
-    protected override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val response = AuthorizationClient.getResponse(resultCode, data)
-        if (response.error != null && response.error.isEmpty()) {
-            setResponse(response.error)
-        }
-        if (requestCode == MainActivity.AUTH_TOKEN_REQUEST_CODE) {
-            mAccessToken = response.accessToken
-            updateTokenView()
-        } else if (requestCode == MainActivity.AUTH_CODE_REQUEST_CODE) {
-            mAccessCode = response.code
-            updateCodeView()
-        }
-    }
-
-    private fun setResponse(text: String) {
-        runOnUiThread(Runnable {
-            val responseView: TextView = findViewById(R.id.response_text_view)
-            responseView.setText(text)
-        })
-    }
-
-    private fun updateTokenView() {
-        val tokenView: TextView = findViewById(R.id.token_text_view)
-        tokenView.setText(getString(R.string.token, mAccessToken))
-    }
-
-    private fun updateCodeView() {
-        val codeView: TextView = findViewById(R.id.code_text_view)
-        codeView.setText(getString(R.string.code, mAccessCode))
-    }
-
-    private fun cancelCall() {
-        if (mCall != null) {
-            mCall.cancel()
-        }
-    }
-
-    private fun getRedirectUri(): Uri {
-        return Uri.Builder()
-            .scheme(getString(R.string.com_spotify_sdk_redirect_scheme))
-            .authority(getString(R.string.com_spotify_sdk_redirect_host))
-            .build()
-    }
-*/
 
 }
