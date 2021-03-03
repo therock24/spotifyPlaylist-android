@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.playlist_item.view.*
 import java.util.*
 
 /**
- * Adapter that manages Track items of the RecyclerView in [PlaylistTracksFragment].
+ * Adapter that manages Playlist items of the RecyclerView in [PlaylistFragment].
  */
 class PlaylistAdapter: RecyclerView.Adapter<PlaylistAdapter.ViewHolder>(), Filterable {
 
